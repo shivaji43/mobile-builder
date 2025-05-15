@@ -35,6 +35,6 @@ app.get("/projects",authMiddleware , async(req,res)=>{
 })
 
 
-app.listen(3000, ()=>{
-    console.log("primary-backend running on port 3000");
+app.listen(8080, ()=>{
+    console.log("primary-backend running on port 8080");
 })

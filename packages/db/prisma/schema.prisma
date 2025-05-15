@@ -27,7 +27,7 @@ model Project {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   prompts       Prompt[]
-  userId        String @unique
+  userId        String
 }
 
 model Prompt {

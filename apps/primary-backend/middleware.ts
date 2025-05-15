@@ -1,24 +1,33 @@
-import type { Request , Response, NextFunction } from "express";
-import jwt, { verify } from "jsonwebtoken";
+import type { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 
-export function authMiddleware(req:Request,res:Response ,next:NextFunction){
-    const token = req.headers.authorization;
+const JWT_PUBLIC_KEY = process.env.JWT_PUBLIC_KEY!;
 
-    if(!token){
-        res.status(401).json({ message:"Unauthorized"});
-        return;
-    }
+export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
 
-    const jwtPublicKey = process.env.JWT_PUBLIC_KEY;
-    if (!jwtPublicKey) {
-        console.error('JWT_PUBLIC_KEY environment variable is not defined');
-        res.status(500).json({message:"Internal Server Error"});
-        return;
-    }
+  if (!token) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
 
-    const decoded = jwt.verify(token, jwtPublicKey,{algorithms : ["RS256"]});
-    const userId = (decoded as any).payload.sub
-    req.userId = userId;
-    
-    next()
+  const decoded = jwt.verify(token, JWT_PUBLIC_KEY!, {
+    algorithms: ["RS256"],
+  });
+
+  if (!decoded) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  const userId = (decoded as any).sub;
+
+  if (!userId) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  req.userId = userId;
+  next();
 }
