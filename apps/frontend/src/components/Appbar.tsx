@@ -11,7 +11,7 @@ interface AppbarProps {
   onLogin?: () => void;
 }
 
-const Appbar: React.FC<AppbarProps> = ({ onLogin }) => {
+const Appbar: React.FC<AppbarProps> = ({}) => {
   return (
     <header className="flex justify-between items-center w-full p-4 bg-white shadow-sm rounded-lg">
       <div className="font-bold text-xl">ZeroBuilder</div>
