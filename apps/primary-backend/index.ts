@@ -27,7 +27,7 @@ app.post("/project",authMiddleware, async (req,res)=>{
 app.get("/projects",authMiddleware , async(req,res)=>{
     const userId = String(req.userId!);
 
-    const project = await prisma.project.findFirst({
+    const project = await prisma.project.findMany({
         where : { userId }
     })
 
@@ -36,5 +36,5 @@ app.get("/projects",authMiddleware , async(req,res)=>{
 
 
 app.listen(9090, ()=>{
-    console.log("primary-backend running on port 8080");
+    console.log("primary-backend running on port 9090");
 })
